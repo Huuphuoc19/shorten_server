@@ -29,51 +29,88 @@ ALTER TABLE hits
 create table total
 (
 	id int not null primary key,
-	total bigint null
+	total bigint DEFAULT 0 null
 )
 
--- thong ke theo ngay, theo short link va theo location
+-- CREATE PROCEDURE 
 
-create procedure spTotalHitPerDay
-(in id int,in inDay date)
-begin 
-	select h.location,COUNT(h.id) as "hits"
-		from hits as h
-			where h.id_shorten = id and DATE(h.hit_time) = inDay
-				group by h.location;
-	select h.referer,COUNT(h.id) as "hits"
-		from hits as h
-			where h.id_shorten = id and DATE(h.hit_time) = inDay
-				group by h.referer;
-end
-
-
--- thong ke theo tuan, theo short link va theo location
-create procedure spTotalHitPerWeek
-(in id int, in inWeek int)
-begin 
-select h.location,COUNT(h.id) as "hits"
-	from hits as h
-		where h.id_shorten = 16 and WEEK(h.hit_time) = inWeek
-			group by h.location;
-
-select h.referer,COUNT(h.id) as "hits"
-	from hits as h
-		where h.id_shorten = 16 and WEEK(h.hit_time) = inWeek
-			group by h.referer;
-
-end
+-- hits last 30 days per for a particular link
 
 delimiter ;;
 
-drop procedure if exists test2;;
+drop procedure if exists spGetHitLastDay;;
 
-create procedure test2()
+CREATE PROCEDURE spGetHitLastDay
+(IN id INT,IN days INT)
+BEGIN
 
-begin
+	DECLARE x INT;
+	DECLARE day DATE;
+	-- temp for count
+	DECLARE temp INT;
 
-select ‘Hello World’;
+	SET x = 0;
+	SET day = CURRENT_TIMESTAMP;
 
-end
+	-- loop through 30 days
+	WHILE x < days DO
+		SELECT COUNT(*) INTO temp
+        	FROM hits as h 
+            	WHERE DATE(h.hit_time) = DATE(day) AND h.id_shorten = id
+            		GROUP BY DATE(h.hit_time);
+
+        SELECT DATE(day) as "date", temp as "hits";
+
+        SET x = x + 1;
+        SET day = SUBDATE(day, INTERVAL 1 DAY);
+        SET temp = 0;
+	END WHILE;
+
+
+END
 
 ;;
+
+-- end 
+
+-- hits by loaction for link
+
+delimiter ;;
+
+drop procedure if exists spGetHitByLocation;;
+
+CREATE PROCEDURE spGetHitByLocation
+(IN id INT)
+BEGIN
+
+	SELECT h.location,COUNT(h.id) as "hits" 
+		FROM hits as h 
+			WHERE h.id_shorten = id 
+				GROUP BY h.location;
+
+END
+
+;;
+
+-- end 
+
+-- hits by referer for link
+
+delimiter ;;
+
+drop procedure if exists spGetHitByReferer;;
+
+CREATE PROCEDURE spGetHitByReferer
+(IN id INT)
+BEGIN
+
+	SELECT h.referer,COUNT(h.id) as "hits" 
+		FROM hits as h 
+			WHERE h.id_shorten = id 
+				GROUP BY h.referer;
+
+END
+
+;;
+
+-- end 

@@ -1,19 +1,6 @@
 var conn = require('./dao.js');
 
 module.exports = {
-	// get all short link from database
-	getAllShortLink: function (done) {
-		conn.query({
-			sql: 'SELECT * FROM `shortlink`'
-		}, function (error, results, fields) {
-		 	if(error){
-		 		done(error,null);
-		 	}else{
-		 		done(null, results);
-		 	}
-		})
-	},
-
 	// get a link by short code
 	getShortLinkByUniqueCode: function(uniqueCode,done){
 		conn.query({

@@ -7,13 +7,14 @@ var conn = require('./dao.js');
  * nhap vao ngay thng, tra ve nhung location cua ngay hom do {location: soluong}
  * -------------------------------- referer cua ngay hom do
  * lay tong so lan lick
- */
+ */	
 
 module.exports = {
-	test: function(done) {
+	// get all short link from database
+	getAllShortLink: function (limit,done) {
+		limit = (limit == -1) ? "" : ('LIMIT ' + limit);
 		conn.query({
-			sql: 'call spTotalHitPerWeek(?,?)',
-			values: [16,5]
+			sql: 'SELECT * FROM `shortlink` ' + limit
 		}, function (error, results, fields) {
 		 	if(error){
 		 		done(error,null);
@@ -22,4 +23,43 @@ module.exports = {
 		 	}
 		})
 	},
+
+	getHitsLastDays: function(id,days,done) {
+		conn.query({
+			sql: 'call spGetHitLastDay(?,?)',
+			values: [id,days]
+		}, function (error, results, fields) {
+		 	if(error){
+		 		done(error,null);
+		 	}else{
+		 		done(null, results);
+		 	}
+		})
+	},
+
+	getHitsByLocation: function(id,done) {
+		conn.query({
+			sql: 'call spGetHitByLocation(?)',
+			values: [id]
+		}, function (error, results, fields) {
+		 	if(error){
+		 		done(error,null);
+		 	}else{
+		 		done(null, results);
+		 	}
+		})
+	},
+
+	getHitsByReferer: function(id,done) {
+		conn.query({
+			sql: 'call spGetHitByReferer(?)',
+			values: [id]
+		}, function (error, results, fields) {
+		 	if(error){
+		 		done(error,null);
+		 	}else{
+		 		done(null, results);
+		 	}
+		})
+	}
 }
