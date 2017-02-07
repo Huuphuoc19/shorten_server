@@ -87,9 +87,6 @@ router.post('/hitsbyreferer',function(req,res){
 				referer: [],
 				hits: []
 			}
-			console.log("----------------");
-			console.log(data);
-			console.log(length);
 			for(var i = 0 ; i < length ; i++){
 				if(items[i].referer != null){
 					var url = parse(items[i].referer);
@@ -101,7 +98,6 @@ router.post('/hitsbyreferer',function(req,res){
 
 				dataResultAPI.hits.push(items[i].hits);
 			}	
-			console.log(dataResultAPI);
 			res.send(JSON.stringify(dataResultAPI));	
 		}
 	})
