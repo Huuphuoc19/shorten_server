@@ -93,7 +93,7 @@ router.post('/hitsbyreferer',function(req,res){
 
 					dataResultAPI.referer.push(url.hostname);
 				}else{
-					dataResultAPI.referer.push("None")
+					dataResultAPI.referer.push("Dark Traffic")
 				}
 
 				dataResultAPI.hits.push(items[i].hits);

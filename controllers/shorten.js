@@ -69,6 +69,7 @@ router.post('/makeshorten',function(req,res){
 // post {link: "shortlink"} 
 router.post('/redirect',function(req,res){
 	var shortCode;
+	var referer = req.body.referrer;
 	if(req.body.link){
 		//var url = parse(req.body.link);
 		shortCode = req.body.link;
@@ -109,7 +110,7 @@ router.post('/redirect',function(req,res){
 
 				// get location for update to hits table
 				requestHandle.getLocationByIp(req,function(address){
-					var referer = requestHandle.getReferer(req);
+					
 					var dataToUpdateHits = {
 							ip_address: (address) ? address.ip : null,
 							location: (address) ? address.location : null,
