@@ -23,6 +23,18 @@ module.exports = {
 		 	}
 		})
 	},
+	// get all short link from database
+	getTotalShortLink: function (done) {
+		conn.query({
+			sql: 'SELECT * FROM `total` where `id` = 1'
+		}, function (error, results, fields) {
+		 	if(error){
+		 		done(error,null);
+		 	}else{
+		 		done(null, results);
+		 	}
+		})
+	},
 
 	getHitsLastDays: function(id,days,done) {
 		conn.query({

@@ -56,6 +56,15 @@ router.post('/makeshorten',function(req,res){
 						res.status(500).send(err);
 					}else{
 						dataResult.state = 0;
+							// update hit for total + 1
+							shortenModel.updateLinkTotal(function(err,dataLinkAll){
+								if(err){
+									console.log(err);
+								}else{
+									console.log("Rows effect: " + dataLinkAll);
+								}
+							})
+
 						res.send(JSON.stringify(dataResult));
 					}
 				})
@@ -85,7 +94,6 @@ router.post('/redirect',function(req,res){
 			return;
 		}else{
 			var dataResult = {}
-			console.log(data);
 			// if have link 
 			if(data){
 				dataResult.longlink = (data.longlink);
@@ -96,15 +104,6 @@ router.post('/redirect',function(req,res){
 						console.log(err);
 					}else{
 						console.log("Rows effect: " + dataHitLink);
-					}
-				})
-
-				// update hit for total + 1
-				shortenModel.updateHitTotal(function(err,dataHitAll){
-					if(err){
-						console.log(err);
-					}else{
-						console.log("Rows effect: " + dataHitAll);
 					}
 				})
 

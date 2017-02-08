@@ -6,7 +6,7 @@ var statisticModel = require('../models/statistic.js');
 var parse = require('url-parse');
 
 router.get('/',function(req,res){
-
+	
 })
 
 // get all short link
@@ -19,7 +19,18 @@ router.post('/allshortlink',function(req,res){
 			res.send(JSON.stringify(data));
 		}
 	})
+}),
+// get all short link
+router.get('/totalshortlink',function(req,res){
+	statisticModel.getTotalShortLink(function(err,data){
+		if(err){
+			console.log(err);
+		}else{
+			res.send(JSON.stringify(data[0])); // first result set
+		}
+	})
 })
+
 
 // get all short link
 router.post('/totallastdays',function(req,res){

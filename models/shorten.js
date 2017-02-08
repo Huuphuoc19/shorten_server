@@ -80,14 +80,14 @@ module.exports = {
 		}) // end transaction
 	}, // end function
 
-	updateHitTotal: function(done){
+	updateLinkTotal: function(done){
 		conn.beginTransaction(function(err) {
 			if(err){
 				done(err, null);
 				return;
 			}
 			conn.query({
-				sql : 'update `total` set `total_hits` = `total_hits` + 1'
+				sql : 'update `total` set `total_links` = `total_links` + 1'
 			},function (error, results, fields){
 				if(error){
 					return conn.rollback(function(){
